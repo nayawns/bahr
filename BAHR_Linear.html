@@ -80,13 +80,34 @@
                 }
             }
         }
+    
+    <script>
+        function filterTable() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            var table = document.getElementById("pricelistTable");
+            var rows = table.getElementsByTagName("tr");
+            var loading = document.getElementById("loadingText");
+
+            loading.style.display = "inline"; // 로딩 표시 보이기
+            setTimeout(() => {
+                for (var i = 1; i < rows.length; i++) {
+                    var modelCell = rows[i].getElementsByTagName("td")[0];
+                    if (modelCell) {
+                        var modelText = modelCell.textContent || modelCell.innerText;
+                        rows[i].style.display = modelText.toLowerCase().includes(input) ? "" : "none";
+                    }
+                }
+                loading.style.display = "none"; // 로딩 표시 숨기기
+            }, 500); // 0.5초 지연 후 실행
+        }
     </script>
+</script>
 </head>
 <body>
     <h2>Bahr / IMI Pricelist</h2>
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="모델명을 입력해 주세요.">
-        <button onclick="filterTable()">검색하기</button>
+        <button onclick="filterTable()">검색하기</button> <span id="loadingText" style="display:none; color:red; font-weight:bold; margin-left: 10px;">Loading...</span> <span id="loadingText" style="display:none; color:red; font-weight:bold; margin-left: 10px;">Loading...</span>
     </div>
     <div class="container">
         <table id="pricelistTable">
@@ -8028,5 +8049,35 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("loadingText").style.display = "none"; // 페이지 로딩 후 숨김
+        });
+
+        function filterTable() {
+            var input = document.getElementById("searchInput").value.toLowerCase();
+            var table = document.getElementById("pricelistTable");
+            var rows = table.getElementsByTagName("tr");
+            var loading = document.getElementById("loadingText");
+
+            loading.style.display = "inline"; // 로딩 표시 보이기
+            
+            setTimeout(() => {
+                for (var i = 1; i < rows.length; i++) {
+                    var modelCell = rows[i].getElementsByTagName("td")[0];
+                    if (modelCell) {
+                        var modelText = modelCell.textContent || modelCell.innerText;
+                        if (modelText.toLowerCase().includes(input)) {
+                            rows[i].style.display = "";
+                        } else {
+                            rows[i].style.display = "none";
+                        }
+                    }
+                }
+                loading.style.display = "none"; // 로딩 표시 숨기기
+            }, 500); // 0.5초 지연 후 실행
+        }
+    </script>
 </body>
 </html>
